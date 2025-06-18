@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Integer
 
 # 1. Connect to SQLite
 DATABASE_URL = "sqlite:///./shortener.db"
@@ -17,3 +18,4 @@ class URL(Base):
     __tablename__ = "urls"
     short_id = Column(String, primary_key=True, index=True)
     original_url = Column(String, nullable=False)
+    clicks = Column(Integer, default=0)

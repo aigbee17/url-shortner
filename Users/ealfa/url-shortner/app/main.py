@@ -33,6 +33,8 @@ def read_root():
 def redirect_to_url(short_id: str, db: Session = Depends(get_db)):
     result = db.query(URL).filter(URL.short_id == short_id).first()
     if result:
+        result.clicks += 1
+        db.commit()
         return RedirectResponse(result.original_url)
     
     else: 
@@ -59,3 +61,18 @@ def create_short_url(
     
     short_url = str(request.base_url) + short_id
     return {"short_url": short_url}
+
+
+
+@app.get("/stats/{short_id}")
+def get_click_stats(short_id: str, db: Session = Depends(get_db)):
+    result = db.query(URL).filter(URL.short_id == short_id).first()
+    if result:
+        return{
+            "short_id": result.short_id,
+            "original_url": result.original_url,
+            "clicks": result.clicks
+        }
+    
+    else:
+        raise HTTPException(status_code = 404, detail= "Short URL not found")
