@@ -1,0 +1,4 @@
+# Ignore SQLite DB and cache
+shortener.db
+__pycache__/
+*.pyc
